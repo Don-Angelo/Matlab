@@ -1,0 +1,16 @@
+21-07-2017: Korrektur zur Aufgabengabenstellung der Aufgabe 1
+
+Es sind die Grün und Blauanteile, nicht der Rot- und Grünanteil vertauscht.
+Hinweis von Arno Müller.
+
+Aufgabenstellung entsprechend geändert.
+
+
+24-07-2017: Korrektur des Bildes Aufgabe4.png
+
+Es waren ein paar Sonderzeichen nicht richtig als ASCII codiert.
+
+Neues Bild steht bereit.
+
+
+
