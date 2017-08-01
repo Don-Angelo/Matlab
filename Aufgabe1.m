@@ -38,6 +38,7 @@ BildLSB(2:2:size(BildLSB,1),:,:)=flip(BildLSB(2:2:size(BildLSB,1),:,:),2);
 BildLSBgruen=BildLSB(:,:,2);
 BildLSB(:,:,2)=BildLSB(:,:,3);
 BildLSB(:,:,3)=BildLSBgruen;
+clear BildLSBgruen
 
 
 %% Teil 2:
@@ -61,18 +62,17 @@ BildErdbeer=hsv2rgb(BildHSV);
 
 %% Bildausgabe
 
-%Originalbild
-figure(1);
-imshow(Originalbild);
-
 %HSB-Bild
 figure(2);
 imshow(BildHSB);
+imwrite(BildHSB,'Aufgabe1_HSB.png');
 
 %LSB-Bild
 figure(3);
 imshow(BildLSB);
+imwrite(BildLSB,'Aufgabe1_LSB.png');
 
 %Erdbeereis
 figure(4);
 imshow(BildErdbeer);
+imwrite(BildErdbeer,'Aufgabe1_Erdbeereis.png');
