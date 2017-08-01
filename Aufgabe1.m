@@ -2,14 +2,18 @@
 clear
 Originalbild = imread('Aufgabe1.png');
 class(Originalbild)
-Bild=Originalbild;
-%Bild=bitget(Originalbild,8:-1:1,'unit16');
-class(Bild)
 
-a=Originalbild(1,1)
-dec2bin(a)
-bitget(a,8:-1:1,'uint8')
+%In HSB-Bild exportieren
+BildVordergrund=im2uint8(Originalbild);
+class(BildVordergrund)
+
+
+
+
 
 %Originalbild Darstellen
-%figure(1);
-%imshow(Originalbild);
+figure(1);
+imshow(Originalbild);
+%HSB-Bild Darstellen
+figure(2);
+imshow(BildVordergrund);
