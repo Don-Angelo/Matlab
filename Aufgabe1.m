@@ -1,40 +1,51 @@
-%Marlab-Projekt Aufgabe 1
+%Matlab-Projekt Aufgabe 1
 
 %{
     Autor: Marcel Grandinetti
     Datum:01.08.2017
     Beschribung:    Teil 1: Einlesen des Bildes und aufspalten in ein HSB-Bild und ein 
                             LSB-Bild (HSB = die 8 höchstwertigen Bits LSB = die 8
-                            niederwertigen Bits)
-            
+                            niederwertigen Bits, Originalbild hat 16 Bits)
+                            und das LSB-Bild so bearbeiten, dass es richtig
+                            dargestellt wird.
+
+                    Teil 2: Waldmeistereis des HSB-Bildes in Erdbeereis
+                            umwandeln
 %}
 clear
 
 %% Teil 1:
 
-
 %Eilesen des Bildes
 Originalbild = imread('Aufgabe1.png');
 
-
 %HSB-Bild exportieren
 BildHSB=bitshift(Originalbild,-8);
-BildHSB=uint8(BildHSB);        %Bild in uint8 umwandeln (8LSB werden verworfen)
-
+BildHSB=uint8(BildHSB);             %Bild in uint8 umwandeln (8LSB werden verworfen)
 
 %LSB-Bild exporiteren
-BildLSB=bitshift(Originalbild,8);   %Bits nach links versc hieben: 
-                                        %0110000001010101 -> 0101010100000000
-BildLSB=bitshift(BildLSB,-8);       %Bits nach rechts verschieben: 
-                                        %0101010100000000 -> 01010101
+BildLSB=bitshift(Originalbild,8);   %Bits nach links versc hieben
+BildLSB=bitshift(BildLSB,-8);       %Bits nach rechts verschieben
 BildLSB=uint8(BildLSB);             %Bild in uint8 umwandeln
 
+%Jede zweite zeile der Matrix in der mitte Flippen
+    %Size(x,1) gibt die anzahl an Zeilen aus
+    %flip(x,2) Flippt die Zeilen in der Mitte
+BildLSB(2:2:size(BildLSB,1),:,:)=flip(BildLSB(2:2:size(BildLSB,1),:,:),2);
 
-%Bit Beispiel
-dec2bin(Originalbild(1,1,1))
-dec2bin(BildHSB(1,1,1))
-dec2bin(BildLSB(1,1,1))
+%Grün  und blau Anteile tauschen
+BildLSBgruen=BildLSB(:,:,2);
+BildLSB(:,:,2)=BildLSB(:,:,3);
+BildLSB(:,:,3)=BildLSBgruen;
 
+%% Teil 2:
+
+%HSB-Bild in HSV-Bild umwandeln
+BildHSV=rgb2hsv(BildHSB);
+
+BildErdbeer=hsv2rgb(BildHSV);
+
+%% Testsection
 
 
 
@@ -52,3 +63,7 @@ imshow(BildHSB);
 %LSV-Bild
 figure(3);
 imshow(BildLSB);
+
+%Erdbeereis
+figure(4);
+imshow(BildErdbeer);
