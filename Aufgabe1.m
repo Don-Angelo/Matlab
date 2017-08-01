@@ -29,20 +29,32 @@ BildLSB=bitshift(BildLSB,-8);       %Bits nach rechts verschieben
 BildLSB=uint8(BildLSB);             %Bild in uint8 umwandeln
 
 %Jede zweite zeile der Matrix in der mitte Flippen
-    %Size(x,1) gibt die anzahl an Zeilen aus
-    %flip(x,2) Flippt die Zeilen in der Mitte
 BildLSB(2:2:size(BildLSB,1),:,:)=flip(BildLSB(2:2:size(BildLSB,1),:,:),2);
-
+                                    %Size(x,1) gibt die anzahl an Zeilen aus
+                                    %flip(x,2) Flippt die Zeilen in der Mitte
+                                    
 %Grün  und blau Anteile tauschen
 BildLSBgruen=BildLSB(:,:,2);
 BildLSB(:,:,2)=BildLSB(:,:,3);
 BildLSB(:,:,3)=BildLSBgruen;
+
 
 %% Teil 2:
 
 %HSB-Bild in HSV-Bild umwandeln
 BildHSV=rgb2hsv(BildHSB);
 
+%Grenzwerte zum Ersetzen definieren
+multiplikator=1/360;                %Multiplikator pro grad da HSV Raum von 0-1=0-360°
+untereGrenze=30;                    %Angabe in Grad      
+untereGrenze=untereGrenze*multiplikator;
+obereGrenze=220;                    %Angabe in Grad
+obereGrenze=obereGrenze*multiplikator;
+
+%Grümwerte anhand der Grenzen finden und ersetzen
+BildHSV(find(BildHSV(:,:,1)>untereGrenze & BildHSV(:,:,1)<obereGrenze))=1;
+
+%HSV-Bild in RGB-Bild zurückwandeln
 BildErdbeer=hsv2rgb(BildHSV);
 
 %% Testsection
