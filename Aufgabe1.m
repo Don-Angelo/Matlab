@@ -14,6 +14,7 @@
 %}
 clear
 
+
 %% Teil 1:
 
 %Eilesen des Bildes
@@ -45,21 +46,17 @@ BildLSB(:,:,3)=BildLSBgruen;
 BildHSV=rgb2hsv(BildHSB);
 
 %Grenzwerte zum Ersetzen definieren
-multiplikator=1/360;                %Multiplikator pro grad da HSV Raum von 0-1=0-360°
-untereGrenze=30;                    %Angabe in Grad      
+multiplikator=1/360;                %Multiplikator pro grad da HSV Raum von 0-1=>0-360°
+untereGrenze=30;                    %Farbangabe in Grad      
 untereGrenze=untereGrenze*multiplikator;
-obereGrenze=220;                    %Angabe in Grad
+obereGrenze=220;                    %Farbangabe in Grad
 obereGrenze=obereGrenze*multiplikator;
 
-%Grümwerte anhand der Grenzen finden und ersetzen
+%Grünwerte anhand der Grenzen finden und ersetzen
 BildHSV(find(BildHSV(:,:,1)>untereGrenze & BildHSV(:,:,1)<obereGrenze))=1;
 
 %HSV-Bild in RGB-Bild zurückwandeln
 BildErdbeer=hsv2rgb(BildHSV);
-
-%% Testsection
-
-
 
 
 %% Bildausgabe
@@ -72,7 +69,7 @@ imshow(Originalbild);
 figure(2);
 imshow(BildHSB);
 
-%LSV-Bild
+%LSB-Bild
 figure(3);
 imshow(BildLSB);
 
