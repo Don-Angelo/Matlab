@@ -18,36 +18,50 @@ plot(tSigPlot,tonspur);
 
 %% FFT
 
-
-
-
-
-
-
-fftRate = 2^nextpow2(abtastrate); % nextpow2 = next higher power of 2
-
+fftRate=size(tonspur,1);
 spektrum =fft(tonspur,fftRate)/fftRate;
 
+
+%Plot Spektrum
 figure(2)
 fMax=20000;
 fAchse=linspace(0,fMax,fftRate/2+1);
-plot(fAchse,spektrum(1:fftRate/2+1)); % Plot Amplitudenspektrum
+plot(fAchse,abs(spektrum(1:fftRate/2+1))); % Plot Amplitudenspektrum
+
+%% Filtern und Rücktransformieren
 
 
 
+% bandbreite=100;
+% [M,I]=max(abs(spektrum(:,1)))
+% st=I-bandbreite:1:I+bandbreite;
+% spektrum(st,:)=0;
+
+% anfang=mean(abs(spektrum(:,1)))    
+% while (mean(abs(spektrum(:,1))) > 0.000005)
+%     bandbreite=200;
+%     [M,I]=max(abs(spektrum));
+%     st=I-bandbreite:1:I+bandbreite;
+%     spektrum(st,:)=0;   
+% end
+% ende=mean(abs(spektrum(:,1)))
 
 
-
-
-spektrum(find(spektrum==(0.0158 + 0.0983i)))=0;
 figure(3);
 plot(fAchse,abs(spektrum(1:fftRate/2+1))); % Plot Amplitudenspektrum
 
+
+
+%IFFT
+tonNeu=ifft(spektrum,fftRate)*fftRate;
 
 %% Testsection
 
 
 
+
+
 %% Tonspur abspielen
 
-sound(tonspur,abtastrate);
+sound(tonNeu,abtastrate);
+
