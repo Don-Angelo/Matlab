@@ -1,4 +1,4 @@
-%Matlab-Projekt Aufgabe 2
+%Matlab-Projekt Aufgabe 3
 
 %{
     Autor: Marcel Grandinetti
@@ -20,7 +20,14 @@ y=1.2*t.*cos(w*t);
 
 %% Plot
 
-figure(1)
+figure(1);
+subplot(1,2,1);
 plot3(x,y,t);
 box on;
 grid on;
+
+subplot(1,2,2);
+plot3(x,y,t);
+box on;
+grid on;
+view(2)
