@@ -90,4 +90,4 @@ tonNeu=real(ifft(spektrumZsm,fftRate)*fftRate);
 
 
 sound(tonNeu,abtastrate);
-audiowrite('EntstoertA2.mp3',tonNeu,abtastrate);
+%audiowrite('EntstoertA2.mp3',tonNeu,abtastrate);
