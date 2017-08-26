@@ -86,6 +86,8 @@ spektrumZsm=complex(spektrumReal,spektrumImag);
 tonNeu=real(ifft(spektrumZsm,fftRate)*fftRate);
 
 
+
+
 %% Tonspur abspielen
 
 
