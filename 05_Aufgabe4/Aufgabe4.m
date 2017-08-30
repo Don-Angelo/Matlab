@@ -2,9 +2,9 @@
 
 %{
     Autor: Marcel Grandinetti
-    Datum:01.08.2017
-    Beschribung:    x(zeile,spalte)
-                    
+    Datum:05.08.2017
+    Beschribung:    Einlesen eines binären Bildes, mittels PN-Sequenz
+                    entschlüsseln, Bits sortieren und als Text ausgeben.                  
 %}
 clear
 
@@ -34,7 +34,7 @@ initialwert=[1 0 0 0 1 0 0 0 0 0 1 0];
 
 pnFunktion = comm.PNSequence('Polynomial', generatorpolynom,'VariableSizeOutput', false,'SamplesPerFrame', pixelanzahl,'InitialConditions', initialwert);
 
-%Nachbearbeiten des Pseudo-Rauschen
+%
 pnReihe = step(pnFunktion);
 
 

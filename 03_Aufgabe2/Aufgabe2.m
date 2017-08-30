@@ -2,94 +2,99 @@
 
 %{
     Autor: Marcel Grandinetti
-    Datum:01.08.2017
-    Beschribung:    
-                    For-Schleife da vector mit den orten der Peaks aber
-                    keine möglichkeit bereiche dahinzu zu fügen
+    Datum:02.08.2017
+    Beschribung:    Einlesen einer Audiodatei, umwandeln in das Spektrum,
+                    Störfrequenzen dedektieren und automatisch rausfiltern.
+                    Anschließend rücktransformieren und ausgeben der
+                    gefilterten Datei.
 %}
 clear
 
-%% Einlesen
 
+%% Einlesen und Transformieren
+
+%Audiodatei einlesen
 [tonspur,abtastrate]=audioread('Aufgabe2.wav');
+
+%Signallänge berechnen
 signallaenge=size(tonspur,1)/abtastrate;        
 
+% Darstellen des Audiosignals im Zeitbereich
 tSigPlot=0:1/abtastrate:signallaenge-1/abtastrate;
-figure(1);
+subplot(3,1,1);
 plot(tSigPlot,tonspur);
+title('Audiosignal im Zeitbereich');
+xlabel('Zeit (s)');
+ylabel('Y(t)');
 
-%% FFT
-
+%FFT
 fftRate=size(tonspur,1);
 spektrum =fft(tonspur,fftRate)/fftRate;
 
+%Plot detektierte Peaks
+subplot(3,1,2);
+fAchse=linspace(0,20000,size(spektrum,1)/2);
+spektrumPeaks=fftshift(spektrum);
+spektrumPeaks=spektrumPeaks((size(spektrum,1)/2)+1:size(spektrum,1),:);
+plot(fAchse,abs(spektrumPeaks)); % Plot Amplitudenspektrum
+findpeaks(abs(spektrumPeaks(:,1)),fAchse,'Threshold',1e-3);
+title('Spektrum mit dedektierten Peaks');
+xlabel('Frequenz (Hz)');
+ylabel('|Y(f)|');
 
-%Plot Spektrum
-figure(2)
-fMax=20000;
-fAchse=linspace(0,fMax,fftRate/2+1);
-plot(fAchse,abs(spektrum(1:fftRate/2+1))); % Plot Amplitudenspektrum
+%Peaks ausgeben
+[pks,locs,mittlereBreite,p] = findpeaks(abs(spektrumPeaks(:,1)),fAchse,'Threshold',1e-3);
+disp('Störfrequenzen:')
+round(locs)
 
-%% Filtern und Rücktransformieren
+
+%% Filtern
 
 %Spektrum in Imaginär- und Realteil aufteilen
 spektrumReal=real(spektrum);
 spektrumImag=imag(spektrum);
 
-%Frequenzachse
+%Frequenzen
 f=linspace(0,size(spektrum,1),size(spektrum,1));
 
-%Plot reales Spektrum
-subplot(2,2,1);
-plot(f,spektrumReal); % Plot Amplitudenspektrum
-findpeaks(abs(spektrumReal(:,1)),f,'Threshold',1e-3);
-title('Realteil ungefiltert');
-
-%Plot imaginäres Spektrum
-subplot(2,2,2);
-plot(f,spektrumImag);
-findpeaks(abs(spektrumImag(:,1)),f,'Threshold',1e-3);
-title('Imaginärteil ungefiltert');
-
 %Filtern reales Spektrum
-[pks,locs,w,p] = findpeaks(abs(spektrumReal(:,1)),f,'Threshold',1e-3);
+[pks,locs,mittlereBreite,p] = findpeaks(abs(spektrumReal(:,1)),f,'Threshold',1e-3);
 locs=int32(locs);
  for x = 1:size(locs,2)
-     bandbreite=int32(w(x)*150);
+     bandbreite=int32(mittlereBreite(x)*150);
      st=locs(x)-bandbreite:1:locs(x)+bandbreite;
      spektrumReal(st,:)=0;
  end
 
 %Filtern imaginäres Spektrum
-[pks,locs,w,p] = findpeaks(abs(spektrumImag(:,1)),f,'Threshold',1e-3);
+[pks,locs,mittlereBreite,p] = findpeaks(abs(spektrumImag(:,1)),f,'Threshold',1e-3);
 locs=int32(locs);
  for x = 1:size(locs,2)
-     bandbreite=int32(w(x)*150);
+     bandbreite=int32(mittlereBreite(x)*150);
      st=locs(x)-bandbreite:1:locs(x)+bandbreite;
      spektrumImag(st,:)=0;
  end
 
-%Plot reales Spektrum nach dem Filtern
-subplot(2,2,3);
-plot(f,spektrumReal); 
-title('Realteil gefiltert');
-
-%Plot imaginäres Spektrum nach dem Filtern
-subplot(2,2,4);
-plot(f,spektrumImag);
-title('Imaginärteil gefiltert');
-
 %Komplexes Spektrum wieder zusammensetzen
 spektrumZsm=complex(spektrumReal,spektrumImag);
+
+%Plot Spektrum nach dem Filtern
+subplot(3,1,3);
+spektrumPlot=fftshift(spektrumZsm);
+spektrumPlot=spektrumPlot((size(spektrum,1)/2)+1:size(spektrum,1));
+plot(fAchse,abs(spektrumPlot)); 
+title('Spektrum gefiltert');
+xlabel('Frequenz (Hz)');
+ylabel('|Y(f)|');
+
+
+%% Rücktransformieren, abspielen & speichern
 
 %IFFT
 tonNeu=real(ifft(spektrumZsm,fftRate)*fftRate);
 
-
-
-
-%% Tonspur abspielen
-
-
+%Abspielen
 sound(tonNeu,abtastrate);
-%audiowrite('EntstoertA2.mp3',tonNeu,abtastrate);
+
+%Speichern
+audiowrite('Aufgabe2Entstoert.wav',tonNeu,abtastrate);
