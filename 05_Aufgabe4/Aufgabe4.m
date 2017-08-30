@@ -4,8 +4,7 @@
     Autor: Marcel Grandinetti
     Datum:05.08.2017
     Beschribung:    Einlesen eines binären Bildes, mittels PN-Sequenz
-                    entschlüsseln, Bits sortieren und als Text ausgeben.
-                  
+                    entschlüsseln, Bits sortieren und als Text ausgeben
 %}
 clear
 
@@ -33,18 +32,19 @@ binDaten=reshape(bild,pixelanzahl,[]);
 generatorpolynom=[12 8 2 0];
 initialwert=[1 0 0 0 1 0 0 0 0 0 1 0];
 
+%PN-Klasse
 pnFunktion = comm.PNSequence('Polynomial', generatorpolynom,'VariableSizeOutput', false,'SamplesPerFrame', pixelanzahl,'InitialConditions', initialwert);
 
-%
+%PN-Reihe erzeugen
 pnReihe = step(pnFunktion);
 
-
+%Binäre Bilddaten mit der PN reihe entschlüsseln
 binErgebnis=xor(binDaten,pnReihe);
 
 
 %% In Text umwandeln
 
-%Binärdaten in einen Matrix mit der Breite des ASCII formats (8) umwandeln
+%Binärdaten in einen Matrix mit der Breite des ASCII Formats (8 Bit) umwandeln
 binText=reshape(binErgebnis,8,[]).';
 
 %Double Format in char Format ändern
@@ -63,7 +63,7 @@ text=flip(text);
 disp(text);
 
 
-%% a
+%% 
 
 a=[1 2 ; 3 4; 5 6]
 x=size(a,1)*size(a,2)
