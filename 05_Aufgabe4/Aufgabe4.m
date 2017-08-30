@@ -4,7 +4,8 @@
     Autor: Marcel Grandinetti
     Datum:05.08.2017
     Beschribung:    Einlesen eines binären Bildes, mittels PN-Sequenz
-                    entschlüsseln, Bits sortieren und als Text ausgeben.                  
+                    entschlüsseln, Bits sortieren und als Text ausgeben.
+                  
 %}
 clear
 
