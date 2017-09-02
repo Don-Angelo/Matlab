@@ -33,7 +33,10 @@ generatorpolynom=[12 8 2 0];
 initialwert=[1 0 0 0 1 0 0 0 0 0 1 0];
 
 %PN-Klasse
-pnFunktion = comm.PNSequence('Polynomial', generatorpolynom,'VariableSizeOutput', false,'SamplesPerFrame', pixelanzahl,'InitialConditions', initialwert);
+pnFunktion = comm.PNSequence(   'Polynomial', generatorpolynom,...
+                                'VariableSizeOutput', false,...
+                                'SamplesPerFrame', pixelanzahl,...
+                                'InitialConditions', initialwert);
 
 %PN-Reihe erzeugen
 pnReihe = step(pnFunktion);
@@ -61,11 +64,3 @@ text=flip(text);
 
 %Text ausgeben
 disp(text);
-
-
-%% 
-
-a=[1 2 ; 3 4; 5 6]
-x=size(a,1)*size(a,2)
-b=reshape(a,x,[])
-c=reshape(a.',x,[])

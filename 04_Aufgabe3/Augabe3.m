@@ -22,17 +22,20 @@ w=2*(windungen/laenge)*pi;
 %Zeitachse
 t=[0:0.01:laenge]; 
 
+%Amplitude
+a=1.2*t;
+
 %X-Funktion
-x=1.2*t.*sin(w*t);
+x=a.*sin(w*t);
 
 %Y-Funktion
-y=1.2*t.*cos(w*t);
+y=a.*cos(w*t);
 
 
 %% Plot
 
 %Plot Helix 3D
-subplot(1,2,1);
+figure(1);
 plot3(x,y,t);
 box on;
 grid on;
@@ -42,11 +45,11 @@ ylabel('y');
 zlabel('t');
 
 %Plot Helix Draufsicht
-subplot(1,2,2);
+figure(2);
 plot3(x,y,t);
 box on;
 grid on;
 title('Helix Draufsicht');
 xlabel('x');
 ylabel('y');
-view(2)
+view(2);
