@@ -19,11 +19,11 @@ clear
 %Signallänge berechnen
 signallaenge=size(tonspur,1)/abtastrate;        
 
-% Darstellen des Audiosignals im Zeitbereich
+%Darstellen des Audiosignals im Zeitbereich
 tSigPlot=0:1/abtastrate:signallaenge-1/abtastrate;
-subplot(3,1,1);
+figure(1);
 plot(tSigPlot,tonspur);
-title('Audiosignal im Zeitbereich');
+title('Ungefiltertes Audiosignal im Zeitbereich');
 xlabel('Zeit (s)');
 ylabel('Y(t)');
 
@@ -32,13 +32,13 @@ fftRate=size(tonspur,1);
 spektrum =fft(tonspur,fftRate)/fftRate;
 
 %Plot detektierte Peaks
-subplot(3,1,2);
+figure(2);
 fAchse=linspace(0,20000,size(spektrum,1)/2);
 spektrumPeaks=fftshift(spektrum);
 spektrumPeaks=spektrumPeaks((size(spektrum,1)/2)+1:size(spektrum,1),:);
 plot(fAchse,abs(spektrumPeaks)); % Plot Amplitudenspektrum
 findpeaks(abs(spektrumPeaks(:,1)),fAchse,'Threshold',1e-3);
-title('Spektrum mit dedektierten Peaks');
+title('Ungefiltertes Spektrum mit dedektierten Peaks');
 xlabel('Frequenz (Hz)');
 ylabel('|Y(f)|');
 
@@ -79,11 +79,11 @@ locs=int32(locs);
 spektrumZsm=complex(spektrumReal,spektrumImag);
 
 %Plot Spektrum nach dem Filtern
-subplot(3,1,3);
+figure(3);
 spektrumPlot=fftshift(spektrumZsm);
 spektrumPlot=spektrumPlot((size(spektrum,1)/2)+1:size(spektrum,1));
 plot(fAchse,abs(spektrumPlot)); 
-title('Spektrum gefiltert');
+title('Gefiltertes Spektrum');
 xlabel('Frequenz (Hz)');
 ylabel('|Y(f)|');
 
@@ -92,6 +92,13 @@ ylabel('|Y(f)|');
 
 %IFFT
 tonNeu=real(ifft(spektrumZsm,fftRate)*fftRate);
+
+%Darstellen des gefilterten Audiosignals im Zeitbereich
+figure(4);
+plot(tSigPlot,tonNeu);
+title('Gefiltertes Audiosignal im Zeitbereich');
+xlabel('Zeit (s)');
+ylabel('Y(t)');
 
 %Abspielen
 sound(tonNeu,abtastrate);
